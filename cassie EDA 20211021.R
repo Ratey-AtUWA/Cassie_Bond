@@ -1,10 +1,16 @@
 # cassie <- read.table("clipboard", header = T, sep="\t", stringsAsFactors = T)
 # write.csv(cassie, file="cassie.csv", row.names = F)
-cassie <- read.csv(file = "cassie.csv", stringsAsFactors = T)
-str(cassie)
-cassie$Repeat.Number <- as.factor(cassie$Repeat.Number)
-cassie$Filter_Size <- as.factor(cassie$Filter_Size)
-cassie$Sample.Code <- as.character(cassie$Sample.Code)
+# cassie <- read.csv(file = "cassie.csv", stringsAsFactors = T)
+# cassie$Repeat.Number <- as.factor(cassie$Repeat.Number)
+# cassie$Filter_Size <- as.factor(cassie$Filter_Size)
+# cassie$Sample.Code <- as.character(cassie$Sample.Code)
+# cassie$Drain <- as.character(cassie$Drain)
+# cassie$Site <- as.character(cassie$Site)
+# cassie$Drain <- gsub("H","O", cassie$Drain)
+# cassie$Site <- gsub("H","O", cassie$Site)
+# cassie$Drain <- as.factor(cassie$Drain)
+# cassie$Site <- as.factor(cassie$Site)
+# str(cassie)
 
 library(DataExplorer)
 plot_histogram(cassie)
@@ -19,7 +25,7 @@ par(mar = c(0,0,0,0), oma = c(4,12,1,1), mgp = c(2,0.3,0), tcl = 0.3, font.lab =
     lend="square", ljoin = "mitre", xpd=T)
 palette(c("black",colorRampPalette(c("#FFE6A3", "#B1609F", "#5560A4"))(6)))
 layout(matrix(c(1,2,2), ncol=1))
-with(cassie, boxplot(counts_corr_perL ~ Catchment, xlim=c(6.656,0.344),
+with(cassie, boxplot(counts_corr_perL ~ Drain, xlim=c(6.656,0.344),
                      horizontal = T, las = 1, xaxt="n", cex = 1.6, 
                      col=seq(2,7), cex.lab = 1.5, cex.axis = 1.2,
                      xlab="", yaxt="n"))
