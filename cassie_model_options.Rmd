@@ -28,7 +28,7 @@ library(car)
 
 to see whether there is a difference between the catchments or sites
 
-```{r}
+```{r between Drain comps, paged.print=F, results='hold'}
 cat("_______________ Comparisons by Drain (Catchment) _______________\n")
 meanz <- signif(tapply(cassie$count_corr_across_sizes.L, cassie$Drain, mean),3)
 sdz <- signif(tapply(cassie$count_corr_across_sizes.L, cassie$Drain, sd),3)
@@ -36,6 +36,9 @@ rsdz <- signif(100*sdz/meanz,3); rbind(meanz,sdz, rsdz)
 with(cassie, oneway.test(count_corr_across_sizes.L ~ Drain))
 with(cassie, pairwise.t.test(count_corr_across_sizes.L, Drain, p.adjust.method = "none", pool.sd = F))
 with(cassie, kruskal.test(count_corr_across_sizes.L ~ Drain))
+```
+
+```{r between Site comps, paged.print=F, results='hold'}
 cat("\n_______________________ Comparisons by Site _______________________\n")
 meanz <- signif(tapply(cassie$count_corr_across_sizes.L, cassie$Site, mean),3)
 sdz <- signif(tapply(cassie$count_corr_across_sizes.L, cassie$Site, sd),3)
@@ -62,7 +65,7 @@ for (i in 1:nlevels(cassie$Drain)){
       ": p = ",signif(tt0$p.value,3),"; mean",n1,"=",signif(tt0$estimate[1],3),
       ", mean",n2,"=",signif(tt0$estimate[2],3),"\n")
 }
-rm(list = c("tt0","n1","n2"))
+rm(list = c("i","tt0","n1","n2"))
 ```
 
 So all within-drain comparisons show no significant difference in mean $\mu$plastic counts.
