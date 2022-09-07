@@ -5,3 +5,10 @@
 .Rdata
 .httr-oauth
 .DS_Store
+*.docx
+*.zip
+*.jpg
+*.jpeg
+*.png
+*.tif
+*.tiff
