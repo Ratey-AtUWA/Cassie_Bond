@@ -17,11 +17,13 @@ summary(cassie)
 str(cassie)
 ```
 
-```{r load packages etc, echo=-1, paged.print=FALSE}
+```{r load packages etc, echo=-1, message=FALSE, warning=FALSE, paged.print=FALSE, results='hide'}
 load("C:/Users/00028958/LocalData/R Projects/Cassie_Bond/.Rdata")
 library(nlme)
 library(multcomp)
 library(car)
+library(corrplot)
+library(RcmdrMisc)
 ```
 
 ### within each of the catchments - run t test
@@ -172,6 +174,35 @@ There is no additional variance structure assumption needed. *No different acros
 <hr>
 
 *Now explore regression model options for covariates that might make sense*.
+
+# LINEAR MIXED EFFECTS MODELS
+
+## Check the collinearity of covariates
+
+### Correlation matrix
+
+```{r correl matrix, paged.print=FALSE, results='hold'}
+cordata <- cassie[,21:29]
+colnames(cordata) <- c("Area","Popln","Resdtl","Indust",
+                        "Servcs","Agric","Natrl","PubOpn","Rain")
+rcorr.adjust(cordata)
+```
+
+### Correlation heatmap
+
+```{r correlation heatmap, fig.height=4, fig.width=4, fig.align='center', fig.cap="Correlation heat map for covariates used to predict microplastic concentrations.", results='hold'}
+covcors <- cor(cordata)
+corrplot(as.matrix(covcors), diag = F, method = 'color', tl.col = 1, 
+         addCoef.col = "orchid1", addCoefasPercent = F, 
+         number.cex = 0.85, number.font = 1)
+```
+
+### Scatter plot matrix
+
+```{r covariate scatter plots, fig.height=7, fig.width=7, message=FALSE, warning=FALSE, fig.align='center', fig.cap="Scatter plot matrix for covariates used to predict microplastic concentrations.", , results='hold'}
+scatterplotMatrix(~Area+Popln+Resdtl+Indust+Servcs+Agric+Natrl+PubOpn+Rain, 
+                  data = cordata, pch = 19, cex.labels=1.6, smooth=F)
+```
 
 # REGRESSION on CATCHMENT POPULATION
 
@@ -706,7 +737,7 @@ cat("\nAnOVa to compare models\n");  anova(lme.base,lme.base.het1)
 
 There is a *significant effect of public open space land-use proportion*. Lower AIC and low p-value mean the heterogeneous model (by Drain) is a better fit.
 
-## Prediction of MP by proportion services, varying by Site
+## Prediction of MP by proportion public open space, varying by Site
 
 ```{r POS var by Site, paged.print=F}
 lme.base.het2 <- lme(count_corr_across_sizes.L ~ public_open, 
@@ -722,13 +753,11 @@ So based on lower AIC and p<0.05, heterogeneous 2 model (by Site) is a statistic
 
 **Public open space land-use proportion** has statistically significant effect on MP counts -- *positive* relationship.
 
-<hr>=-=-=-=-=-=-
+<hr>
 
-# What if linear relationship not found
+# What if a linear relationship is not found?
 
 use this section of code if you need to explore other options
-
-<hr>=-=-=-=-=-=-
 
 *exploration of log(Y) is something you can look at.  Note anova() cant be used to compare log(Y)~ models and Y~ models*
 
@@ -740,6 +769,7 @@ summary(lme.base.het2.log)
 ```
 
 Looking for nonlinear effect
+
 ```{r}
 lme.base.het2.quad <- lme(count_corr_across_sizes.L ~
                             catchment_pop + I(catchment_pop^2), weights = varIdent(form = ~1 | Site), control = ctrl,
@@ -764,7 +794,8 @@ summary(lme.base.het2.quad2)
 
 can solve for the turning point (quadratic and see)
 
-#maybe impose cubic
+maybe impose cubic
+
 ```{r}
 lme.base.het2.cub <- 
   lme(count_corr_across_sizes.L ~ I(catchment_pop^3), 
@@ -775,8 +806,7 @@ lme.base.het2.cub <-
 summary(lme.base.het2.cub)
 ```
 
-#Hmmmmmmmm
-so look closely at the quadratic maybe runs the other way
+Hmmmmmmmm . . . so look closely at the quadratic maybe runs the other way
 
 ```{r}
 summary(lme.base.het2.quad2)
@@ -794,7 +824,7 @@ summary(lme.base.het2.xlog)
 ```
 
 so maybe there is a population effect ...
-this is showing whether variance is constant - HINT it is not, 
+this is showing whether variance is constant - **HINT** it is not, 
 therefore use heterogeneous
 
 ```{r}

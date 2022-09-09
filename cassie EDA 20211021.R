@@ -31,8 +31,8 @@ with(cassie, boxplot(counts_corr_perL ~ Drain, xlim=c(6.656,0.344),
                      xlab="", yaxt="n"))
 axis(2, las = 2, cex.axis = 1.6, at = seq(1,6,1),
      labels = c("Bayswater","Claisebrook","Kitchener",
-                "Osborne Pk.","Sth Belmont", "Sth Coolup"))
-mtext("Catchment",2,9,font=2,cex=1.2)
+                "Osborne Park","South Belmont", "South Coolup"))
+mtext("Drain Catchment",2,9.5,font=2,cex=1.2)
 text(0.7,0.65,labels="(a)", font = 2, cex = 2)
 axis(1, labels=NA, tcl = 0.3)
 axis(1, labels=NA, tcl = -0.3)
@@ -41,7 +41,7 @@ with(cassie, boxplot(counts_corr_perL ~ Site, xlim=c(12.656,0.344),
                      col=rep(seq(2,7), each=2), cex.lab = 1.5, cex.axis = 1.6,
                      xlab=""))
 mtext("Microplastic counts (particles/L)",1,2,font=2, cex = 1.2)
-mtext("Sampling Site",2,9,font=2,cex=1.2)
+mtext("Sampling Site",2,4,font=2,cex=1.2)
 text(0.7,0.4,labels="(b)", font = 2, cex = 2)
 
 layout(matrix(c(1), ncol=1))
